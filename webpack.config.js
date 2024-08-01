@@ -3,6 +3,7 @@ const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
     stats :{
@@ -11,8 +12,9 @@ module.exports = {
             },
     mode : 'development',
     entry: './src/new.ts',
+        
     output: {
-        filename: 'main.js',
+    filename: 'main.js',
         
         
     },
@@ -28,14 +30,14 @@ module.exports = {
         
     },
 
-    plugins: [ 
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(), 
         new MiniCssExtractPlugin(),
         new HtmlWebpackPlugin({
             title: 'development', 
             template: './src/index.pug',
             filename: 'index.html'
-        }),
-        new webpack.HotModuleReplacementPlugin(),
+        }), 
     ],
     optimization: {
         minimize: true,
@@ -65,13 +67,9 @@ module.exports = {
                         loader : 'pug-loader',
                         options: { 
                             pretty: true,
-
                         },
-
                     },
                 ], 
-                    
-                
             },
             {
                 test: /\.ts$/,

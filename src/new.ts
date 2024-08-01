@@ -5,3 +5,4 @@ function sum(a: number, b: number): number{
 }
 
 document.write(sum(4,5).toString());
+

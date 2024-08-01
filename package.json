@@ -7,7 +7,7 @@
     "dev": "parcel <your entry file>",
     "start": "webpack serve --config webpack.config.js",
     "prepare": "husky install",
-    "testhusky": "node test.js",
+    "testhusky": "node testhusky.js",
     "lint": "eslint .src config"
   },
   "author": "",
