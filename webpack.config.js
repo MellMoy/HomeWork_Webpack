@@ -9,22 +9,16 @@ module.exports = {
     stats :{
         children : true,
         //     macModules : 0
-        //test husky
+        //test
             },
     mode : 'development',
     entry: './src/new.ts',
         
-    output: {
-    filename: 'main.js',
-        
-        
-    },
-    
 // настройка dev-server
     devServer: {
         // contentBase: './dist',
         static : './dist',
-        port : 3000,
+        port : 3001,
         hot : true, // полезная для работы с реактом
         open : true,
         
@@ -35,11 +29,16 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(), 
         new MiniCssExtractPlugin(),
         new HtmlWebpackPlugin({
-            title: 'development', 
+            title: 'Development', 
             template: './src/index.pug',
             filename: 'index.html'
         }), 
     ],
+    output: {
+        filename: 'main.js',
+            
+            
+        },
     optimization: {
         minimize: true,
         minimizer: [
