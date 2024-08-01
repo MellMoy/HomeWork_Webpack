@@ -9,6 +9,7 @@ module.exports = {
     stats :{
         children : true,
         //     macModules : 0
+        //test husky
             },
     mode : 'development',
     entry: './src/new.ts',
