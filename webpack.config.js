@@ -1,80 +1,144 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
+const TerserWebpackPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
+const path = require("path");
 
-module.exports = {
-    stats :{
-        children : true,
-        //     macModules : 0
-        //test
-            },
-    mode : 'development',
-    entry: './src/new.ts',
-        
-// настройка dev-server
+module.exports = (env) => {
+  return {
+    stats: {
+      children: true,
+      //     macModules : 0
+      //test
+    },
+    mode: (env.mode = "development"),
+    entry: "./src/new.ts",
+    devtool: "inline-source-map",
+    // настройка dev-server
     devServer: {
-        // contentBase: './dist',
-        static : './dist',
-        port : 3001,
-        hot : true, // полезная для работы с реактом
-        open : true,
-        
-        
+      // contentBase: './dist',
+      static: "./dist",
+      port: 3001,
+      hot: true, // полезная для работы с реактом
+      open: true,
     },
 
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), 
-        new MiniCssExtractPlugin(),
-        new HtmlWebpackPlugin({
-            title: 'Development', 
-            template: './src/index.pug',
-            filename: 'index.html'
-        }), 
+      new webpack.HotModuleReplacementPlugin(),
+      new MiniCssExtractPlugin(),
+      new HtmlWebpackPlugin({
+        title: "Development",
+        template: "./src/index.pug",
+        filename: "index.html",
+      }),
     ],
     output: {
-        filename: 'main.js',
-            
-            
-        },
+      filename: "main.js",
+    },
     optimization: {
-        minimize: true,
-        minimizer: [
-            new CssMinimizerWebpackPlugin(),
-            new TerserWebpackPlugin(),
-        ]
-    },    
+      minimize: true,
+      minimizer: [new CssMinimizerWebpackPlugin(), new TerserWebpackPlugin()],
+    },
     module: {
-        rules: [
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
             {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            esModule: true,
-                        }
-                    },
-                    'css-loader',
-                ],
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true,
+              },
             },
+            "css-loader",
+          ],
+        },
+        {
+          test: /\.pug$/,
+          use: [
             {
-                test: /\.pug$/,
-                use: [
-                    {
-                        loader : 'pug-loader',
-                        options: { 
-                            pretty: true,
-                        },
-                    },
-                ], 
+              loader: "pug-loader",
+              options: {
+                pretty: true,
+              },
             },
+          ],
+        },
+        {
+          test: /\.ts$/,
+          use: "ts-loader",
+        },
+      ],
+    },
+  };
+};
+
+module.exports = (env) => {
+  return {
+    stats: {
+      children: true,
+      //     macModules : 0
+      //test
+    },
+    mode: (env.mode = "production"),
+    entry: "./src/new.ts",
+    devtool: "inline-source-map",
+    // настройка dev-server
+    devServer: {
+      // contentBase: './dist',
+      static: "./dist",
+      port: 3001,
+    //   hot: true, // полезная для работы с реактом
+      open: true,
+    },
+
+    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
+      new MiniCssExtractPlugin(),
+      new HtmlWebpackPlugin({
+        title: "Development",
+        template: "./src/index.pug",
+        filename: "index.html",
+      }),
+    ],
+    output: {
+      filename: "main.js",
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [new CssMinimizerWebpackPlugin(), new TerserWebpackPlugin()],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
             {
-                test: /\.ts$/,
-                use: 'ts-loader'
-            }
-        ]
-    }
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true,
+              },
+            },
+            "css-loader",
+          ],
+        },
+        {
+          test: /\.pug$/,
+          use: [
+            {
+              loader: "pug-loader",
+              options: {
+                pretty: true,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.ts$/,
+          use: "ts-loader",
+        },
+      ],
+    },
+  };
 };

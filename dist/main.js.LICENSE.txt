@@ -1,3 +1,9 @@
+/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */
+
+/*! ./normalize-url */
+
+/*! ./style.css */
+
 /*!********************!*\
   !*** ./src/new.ts ***!
   \********************/
