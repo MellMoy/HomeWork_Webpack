@@ -6,139 +6,53 @@ const webpack = require("webpack");
 const path = require("path");
 
 module.exports = (env) => {
+  const isProduction = env.mode === "production";
   return {
-    stats: {
-      children: true,
-      //     macModules : 0
-      //test
-    },
-    mode: (env.mode = "development"),
+    mode: isProduction ? "production" : "development",
     entry: "./src/new.ts",
-    devtool: "inline-source-map",
-    // настройка dev-server
+    devtool: isProduction ? "source-map" : "inline-source-map",
     devServer: {
-      // contentBase: './dist',
       static: "./dist",
       port: 3001,
-      hot: true, // полезная для работы с реактом
       open: true,
+      hot: !isProduction,  // Включаем HMR только в режиме разработки
     },
-
     plugins: [
-      new webpack.HotModuleReplacementPlugin(),
       new MiniCssExtractPlugin(),
       new HtmlWebpackPlugin({
         title: "Development",
         template: "./src/index.pug",
         filename: "index.html",
       }),
+      ...(isProduction ? [] : [new webpack.HotModuleReplacementPlugin()]),
     ],
     output: {
+      path: path.resolve(__dirname, "dist"),
       filename: "main.js",
     },
     optimization: {
-      minimize: true,
+      minimize: isProduction,
       minimizer: [new CssMinimizerWebpackPlugin(), new TerserWebpackPlugin()],
     },
     module: {
       rules: [
         {
           test: /\.css$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                esModule: true,
-              },
-            },
-            "css-loader",
-          ],
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
         {
           test: /\.pug$/,
-          use: [
-            {
-              loader: "pug-loader",
-              options: {
-                pretty: true,
-              },
-            },
-          ],
+          use: ["pug-loader"],
         },
         {
           test: /\.ts$/,
           use: "ts-loader",
+          exclude: /node_modules/,
         },
       ],
     },
-  };
-};
-
-module.exports = (env) => {
-  return {
-    stats: {
-      children: true,
-      //     macModules : 0
-      //test
-    },
-    mode: (env.mode = "production"),
-    entry: "./src/new.ts",
-    devtool: "inline-source-map",
-    // настройка dev-server
-    devServer: {
-      // contentBase: './dist',
-      static: "./dist",
-      port: 3001,
-    //   hot: true, // полезная для работы с реактом
-      open: true,
-    },
-
-    plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      new MiniCssExtractPlugin(),
-      new HtmlWebpackPlugin({
-        title: "Development",
-        template: "./src/index.pug",
-        filename: "index.html",
-      }),
-    ],
-    output: {
-      filename: "main.js",
-    },
-    optimization: {
-      minimize: true,
-      minimizer: [new CssMinimizerWebpackPlugin(), new TerserWebpackPlugin()],
-    },
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                esModule: true,
-              },
-            },
-            "css-loader",
-          ],
-        },
-        {
-          test: /\.pug$/,
-          use: [
-            {
-              loader: "pug-loader",
-              options: {
-                pretty: true,
-              },
-            },
-          ],
-        },
-        {
-          test: /\.ts$/,
-          use: "ts-loader",
-        },
-      ],
+    resolve: {
+      extensions: [".ts", ".js"],
     },
   };
 };
